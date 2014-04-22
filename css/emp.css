@@ -1,0 +1,162 @@
+@charset 'utf-8';
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 23, 2013, 9:24:01 PM
+    Author     : Omar
+*/
+/* HEX
+	#003500		BACKGROUND
+        #72001f         MAIN-DISPLAY
+        #72001f         NOTES
+        #980129         SUB_BUTTON
+        #72001f         SUB_BUTTON_HOVER
+	#009018		CONTAINER 1
+	#b81c46		CONTAINER 2
+	#ececec		TEXT
+	#b8b3af		WATERMARKS
+	#ABABAB		GLOW
+	#000000		SHADOWS	
+*/
+body,td,th {	
+    background-color: #72001f;
+    background: url(../images/stripe.jpg);
+    font-weight: bold;
+    font-size: 14px;	
+    color:#e6e6e6;
+    position: relative;
+    text-shadow: 0 0 2px #b8b3af
+}
+.divFooter{
+    margin: 220px auto;    
+    text-align:center;
+}
+.divPic{
+    background-color:#0000; 
+    color: #980129;
+    margin-top: -10px;
+    margin-left: 60px;
+    width:  190px;
+    height: 180px;
+    border-radius: 5px;
+    text-align:center;
+    font-size: 16px;
+}
+#img{    
+    align: middle;
+    height:auto; 
+    width:auto;
+    max-width:190px; 
+    max-height:180px;
+    border-radius: 5px;
+}
+.divRight{ 
+    position:absolute;
+    margin-top: 0px;
+    margin-left: 290px;
+    width: 355px;    
+    
+}
+.divLeft{ 
+    position:relative; 
+    margin-top: -35px;
+    text-align:center;
+    width: 250px;    
+    margin-left: 35px;    
+}
+
+#queryForm{    
+    position: absolute;
+    margin-top: 25px;
+    text-align:right;
+    font-size: 14px;
+    height: 300px;
+    width: 550px;
+}
+
+#submit1 {
+    position:relative;
+    color:#fffef9;
+    text-align:center;
+    margin-left: 140px;
+    width: 350px;
+    height: 25px;
+    border: 3px;
+    background-color:#72001f;
+    border-color:#888F80;
+    border: 1px solid #A0A0A4;
+    border-radius: 5px;   
+}
+#text {
+    position:relative;
+    margin-top: 5px;
+    margin-right: 3px;
+    color:#fffef9;
+    text-align:center;
+    font-size: 14px;
+    width: 235px;
+    height: 18px;
+    border: 1px;
+    background-color:#7b7774;   
+    border: 1px solid #A0A0A4;
+    border-radius: 3px;   
+}
+#text1 {    
+    color:#fffef9;
+    text-align:center;
+    font-size: 14px;
+    width: 620px;
+    height: 70px;
+    background-color:#7b7774;   
+    border: 1px solid #A0A0A4;
+    border-radius: 3px; 
+}
+#textI {
+    position:relative;
+    margin-top: 5px;
+    margin-right: 3px;
+    color:#fffef9;
+    text-align:center;
+    font-size: 14px;
+    width: 200px;
+    height: 18px;
+    border: 1px;
+    background-color:#7b7774;   
+    border: 1px solid #A0A0A4;
+    border-radius: 3px;   
+}
+
+.custom-input-file {
+    overflow: hidden;
+    position: relative;     
+    margin: 0px;
+    padding: 0;
+    cursor: pointer;
+}
+.custom-input-file .input-file { 
+    position: absolute;
+    top: -1000px;
+    right: -1000px;
+    margin: 0px;
+    padding: 0;
+    outline: 0;
+    font-size: 10000px;
+    cursor: pointer;
+    opacity: 0;
+    border: 10000px solid transparent;
+    filter: alpha(opacity=0);
+    cursor: pointer;
+}
+.custom-placeholder{
+    overflow: hidden;
+    background-color: #72001f;
+    color: #e6e6e6;
+    position: relative;
+    margin: 5px;    
+    cursor: pointer;
+    border: 1px solid #A0A0A4;
+    border-radius: 5px; 
+}

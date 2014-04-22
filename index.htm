@@ -1,0 +1,35 @@
+﻿<!DOCTYPE HTML>
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Paperblox</title>
+<!-- just for someday in the future// "http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"     -->
+
+<script type="text/javascript"src="js/jquery.min.js"></script>
+<script type="text/javascript"> $(document).ready(function() { init(); }); </script>
+
+
+<style type="text/css">
+body {
+	background-color: #FFFFFF;
+	background-image:url('img/mainBackground.jpg');
+}
+</style>
+</head>
+<body >
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<div class="container" align="center">
+<div align="center" >
+<canvas id="myCanvas" width="620" height="750" onmousedown =   "handleEvent(event)"  ></canvas>
+</div>
+
+  <!-- end .container -->
+  <audio id="sonido" controls="controls" loop="true" src="media/tetris.mp3" type="audio/mp3" visible="false"> </audio>
+  </div>
+  <script type="text/javascript" src="js/mnScrpt.js"></script> 
+
+</body>
+</html>
