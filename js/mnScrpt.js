@@ -1,71 +1,80 @@
 // JavaScript Document
-var canvas = document.getElementById('myCanvas');
-var c = canvas.getContext('2d');
-
-var playAnimation = true;
-var gameOver=true;
-var audio=false;
-
-var bg 			= new Image();	// Background 	layer Image
-var ele			= new Image();	// Elements 	layer Image
+var canvas          = document.getElementById('myCanvas');
+var c               = canvas.getContext('2d');
+var playAnimation   = true;
+var gameOver        =true;
+var audio           =false;
+var bg 			    = new Image();	// Background 	layer Image
+var ele			    = new Image();	// Elements 	layer Image
 var instructions 	= new Image();	// Instructions
-
-var NewScript = document.createElement('script');
-
+var NewScript       = document.createElement('script');
 var msgHighScore 	= "HIGHEST";
 var msgScore 		= "SCORE";
 var msgLines		= "000";
 var msgLevel		= 1;
-var message = "starting up";
-var pts = 0;
-var totLines = 0;
-
-var orienting = 0;
-
-var irows = 0;
-var tempLines = 0;
-
-var debug = "hola";
-
+var message         = "starting up";
+var pts             = 0;
+var totLines        = 0;
+var orienting       = 0;
+var irows           = 0;
+var tempLines       = 0;
+var debug           = "hola";
 var currentFigure	= 0;
-var nextFigure = Math.floor(Math.random() * 7);
-
-var velocity = 100;
-var temp = 100;
-var color = 0;
-
-var lastY = 610;
-var lastLine = 26; 		//Max bottom line 
-
-var clickX = 0;
-var clickY = 0;
-
-var xPos = 	4;
-var yPos = -1;
-
-var xPosNext = 0;
-var yPosNext = 0;
-
+var nextFigure      = Math.floor(Math.random() * 7);
+var velocity        = 100;
+var temp            = 100;
+var color           = 0;
+var lastY           = 610;
+var lastLine        = 26;  
+var clickX          = 0;
+var clickY          = 0;
+var xPos            = 4;
+var yPos            = -1;
+var xPosNext        = 0;
+var yPosNext        = 0;
 var maxBottomLocal	= 0;
-var timer = -1;
-
-var col = 10;		// 0 - 	24
-var row = 25; 	    	// 0 -	09
-var mainVel = 1;
-var checkFigure = true;
-var collision = false;
-var save = false;
-var drawNext = false;
-var animation = false;
-var boardCollision = null;
-var boardColor = null;
-var sound = $('#sonido')[0];
+var timer           = -1;
+var col             = 10; // 0 - 	24
+var row             = 25; // 0 -	09
+var mainVel         = 1;
+var checkFigure     = true;
+var collision       = false;
+var save            = false;
+var drawNext        = false;
+var animation       = false;
+var boardCollision  = null;
+var boardColor      = null;
+var sound           = $('#sonido')[0];
 
 //Initializer
 function init() {
-
     canvas.addEventListener("touchstart", doTouchStart, true);
-
+	sound.addEventListener("ended", function() {
+	if (msgLevel>=1 && msgLevel<=3)
+	{
+	   sound.src = "media/tetris.mp3";
+	   sound.play();
+	}
+	else if (msgLevel>=4 && msgLevel<=6)
+	{
+	   sound.src = "media/tetris2.mp3";
+	   sound.play();
+	}
+	else if (msgLevel>=7 && msgLevel<=9)
+	{
+	   sound.src = "media/tetris3.mp3";
+	   sound.play();
+	}
+	else if (msgLevel>=10 && msgLevel<=12)
+	{
+	   sound.src = "media/tetris4.mp3";
+	   sound.play();
+	}
+	else if (msgLevel>= 13 )
+	{
+	   sound.src = "media/tetris5.mp3";
+	   sound.play();
+	}});
     boardInitializer();
     loadExternalJS();
     Reset();
