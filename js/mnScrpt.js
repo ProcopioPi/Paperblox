@@ -45,34 +45,41 @@ var animation       = false;
 var boardCollision  = null;
 var boardColor      = null;
 var sound           = $('#sonido')[0];
+var resultadosBaseDatos        =null;
+var numeroResultadosBaseDatos  =null;
+var musica1=1
+var musica2=2
+
 
 //Initializer
 function init() {
     canvas.addEventListener("touchstart", doTouchStart, true);
 	sound.addEventListener("ended", function() {
-	if (msgLevel>=1 && msgLevel<=3)
+	if (msgLevel>=musica1 && msgLevel<=musica2)
 	{
 	   sound.src = "media/tetris.mp3";
 	   sound.play();
 	}
-	else if (msgLevel>=4 && msgLevel<=6)
+	else if (msgLevel>=(musica1+2) && msgLevel<=(musica2+2))
 	{
 	   sound.src = "media/tetris2.mp3";
 	   sound.play();
 	}
-	else if (msgLevel>=7 && msgLevel<=9)
+	else if (msgLevel>=(musica1+4)&& msgLevel<=(musica2+4))
 	{
 	   sound.src = "media/tetris3.mp3";
 	   sound.play();
 	}
-	else if (msgLevel>=10 && msgLevel<=12)
+	else if (msgLevel>= (musica1+6) && msgLevel<= (musica2+6))
 	{
 	   sound.src = "media/tetris4.mp3";
 	   sound.play();
 	}
-	else if (msgLevel>= 13 )
+	else 
 	{
-	   sound.src = "media/tetris5.mp3";
+	   musica1= (musica1+8)
+       musica2= (musica2+8)
+	   sound.src = "media/tetris1.mp3";
 	   sound.play();
 	}});
     boardInitializer();
@@ -428,30 +435,60 @@ function drawBoard() {
     orienting = tmpOr;
 }
 
+
 //Main draw function
 function draw() {
-    
+    	
 	if(!playAnimation){	    
 	    c.drawImage(instructions,29,0);
 	    c.font = "45px Comic Sans MS";		
 	}
 
 	else if (!gameOver) {
-	   	c.font = "45px Comic Sans MS";
-		c.fillStyle = "rgb(250, 250, 250)"; 
-		c.fillText("G A M E" , 300, 370);
-		c.fillStyle = "rgb(250, 250, 250)"; 
-		c.fillText("O V E R" , 308, 420);		
+	
+		$.ajax({
+           url: 'php/ExtraerdatosMysql.php',
+           dataType: 'json'
+        }).done(
+           function(data){
+             resultadosBaseDatos = data[0];
+             numeroResultadosBaseDatos = data[1]; 
+           }
+        );
+		c.font = "45px Comic Sans MS";
+		c.fillStyle = "rgb(250, 250, 250)";
+		if (numeroResultadosBaseDatos == 0)
+		{
+		   c.fillText("G A M E" , 300, 370); 
+		   c.fillText("O V E R" , 308, 420);
+		}
+		else if (numeroResultadosBaseDatos >0 && resultadosBaseDatos != null)
+		{
+		  c.fillText("G A M E" , 300, 180);
+		  c.fillText("O V E R" , 308, 220);
+		  c.font = "26px Comic Sans MS";
+		  c.fillStyle = "rgb(250, 250, 250)";
+		  c.fillText("Name --> Score" , 300, 290);
+		  c.font = "17px Comic Sans MS";
+		  c.fillStyle = "rgb(250, 250, 250)";
+		  var posicionScore=1;
+		  var posision_canvas=30;
+		  var arrayLength = resultadosBaseDatos.length;
+          for (var i = 0; i < arrayLength; i++) 
+          {
+            var res = resultadosBaseDatos[i].split("#");
+	        var impresion=posicionScore+"- "+res[0]+" --> "+res[1];
+            c.fillText(impresion, 290, (320+posision_canvas));
+			posision_canvas=posision_canvas+30;
+			posicionScore=posicionScore+1;
+          }  
+		}	
 	}
 	else{
 		drawBoard(); 							        // Board Update
-	
-		c.font = "24px Comic Sans MS";
-		c.fillStyle = "rgb(250, 250, 250)";             //score
 
-		//c.fillText("DEBUG:: "+debug + " ", 100, 50);	
-        //c.fillText("Timer: " + timer + " 	" + message+" "+velocity, 100, 30);	
-    	//c.fillText(msgHighScore, 450, 70);    	
+		c.font = "24px Comic Sans MS";
+		c.fillStyle = "rgb(250, 250, 250)";             //score   	
 		c.fillText(" "+ pts, 370, 90);
 		c.fillText(" " + totLines, 210, 595);
 		c.font = "45px Comic Sans MS";
