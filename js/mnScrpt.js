@@ -175,9 +175,9 @@ function keydownControl(e) {
 //Load Images			
 function loadImages()
 {	
-	bg.src = "img/bg.jpg";
+	bg.src = "img/bg.gif";
 	ele.src = "img/ele.png";
-	instructions.src = "img/insBG.jpg";
+	instructions.src = "img/insBG.gif";
 }
 
 //Handle mouse events
@@ -443,26 +443,25 @@ function draw() {
 	    c.drawImage(instructions,29,0);
 	    c.font = "45px Comic Sans MS";		
 	}
-
-	else if (!gameOver) {
 	
+	else if (!gameOver) {
+	    c.font = "45px Comic Sans MS";
+		c.fillStyle = "rgb(250, 250, 250)";
+	    if (numeroResultadosBaseDatos ==0)
+	    {
+               c.fillText("G A M E" , 300, 370); 
+		       c.fillText("O V E R" , 308, 420);
+        }
 		$.ajax({
            url: 'php/ExtraerdatosMysql.php',
            dataType: 'json'
         }).done(
            function(data){
              resultadosBaseDatos = data[0];
-             numeroResultadosBaseDatos = data[1]; 
+             numeroResultadosBaseDatos = data[1];			 
            }
         );
-		c.font = "45px Comic Sans MS";
-		c.fillStyle = "rgb(250, 250, 250)";
-		if (numeroResultadosBaseDatos == 0)
-		{
-		   c.fillText("G A M E" , 300, 370); 
-		   c.fillText("O V E R" , 308, 420);
-		}
-		else if (numeroResultadosBaseDatos >0 && resultadosBaseDatos != null)
+		if (numeroResultadosBaseDatos >0 &&numeroResultadosBaseDatos != null && resultadosBaseDatos != null)
 		{
 		  c.fillText("G A M E" , 300, 180);
 		  c.fillText("O V E R" , 308, 220);
@@ -481,8 +480,8 @@ function draw() {
             c.fillText(impresion, 290, (320+posision_canvas));
 			posision_canvas=posision_canvas+30;
 			posicionScore=posicionScore+1;
-          }  
-		}	
+          }
+		}		
 	}
 	else{
 		drawBoard(); 							        // Board Update
