@@ -45,15 +45,32 @@ var animation       = false;
 var boardCollision  = null;
 var boardColor      = null;
 var sound           = $('#sonido')[0];
+var inputText       = $('#user')[0];
+var inputTextLabel  =  $('#textInput')[0];
 var resultadosBaseDatos        =null;
 var numeroResultadosBaseDatos  =null;
-var musica1=1
-var musica2=2
+var userName                   ="";
+var musica1                    =1;
+var musica2                    =2;
+var counterGame                =0;
+var bestScore                  =0;
+var errorMysql                 =0;
 
 
 //Initializer
 function init() {
     canvas.addEventListener("touchstart", doTouchStart, true);
+	
+	$.ajax({url: 'php/ExtraerdatosMysql.php', 
+              dataType: 'json',
+			  async: false
+           }).done(function(data){
+              resultadosBaseDatos = data[0];
+			  var res = resultadosBaseDatos[0].split("#");
+			  bestScore=res[1];
+              }).error(function() {errorMysql=1;});
+	console.log("best score"+bestScore+"\n");		  
+	
 	sound.addEventListener("ended", function() {
 	if (msgLevel>=musica1 && msgLevel<=musica2)
 	{
@@ -112,6 +129,7 @@ function doTouchStart(event) {
 function keydownControl(e) {
     if(playAnimation)
 	{
+	  if (!$("#user").is(":focus")) {
 	    switch(e.keyCode)
 	    {
 		    case 37:
@@ -139,6 +157,8 @@ function keydownControl(e) {
 			      audio=false;
 			    }
 	            sound.hidden= true;
+				inputText.hidden=true;
+				inputTextLabel.hidden=true;
                 PAUSE();
 			  } 
                break;
@@ -159,10 +179,14 @@ function keydownControl(e) {
 			  }	
                break;			
         }
+		
+	  }	
 	}	
     else
 	{
 	    sound.hidden= false;
+		inputText.hidden=false;
+		inputTextLabel.hidden=false;
 	    //sound.duration > 0 && sound.paused para saber duracion y si esta en pausa
 		if (audio==true)
 		{
@@ -445,23 +469,62 @@ function draw() {
 	}
 	
 	else if (!gameOver) {
+	
+		//console.log("prueba al inicio \n");			  
 	    c.font = "45px Comic Sans MS";
 		c.fillStyle = "rgb(250, 250, 250)";
-	    if (numeroResultadosBaseDatos ==0)
+		
+		if ($('#user').val() != "" &&  $('#user').val().length <= 5 ){
+		  var userName=$('#user').val();
+		}
+		else{
+		  var aleatorio=Math.floor((Math.random() * 99) + 1);
+		  var userName="Usr"+aleatorio;
+		}
+		
+		
+		if(counterGame == 0){
+		      
+              $.ajax({ type: "POST",
+                       url: "php/InsertardatosMysql.php",
+					   async: false,
+                       data: { nombre: userName,
+		                       score: pts,
+							   nivel: msgLevel,
+							   lineas: totLines}
+               }).error(function() {errorMysql=1;});
+			   
+		      $.ajax({url: 'php/ExtraerdatosMysql.php', 
+			          dataType: 'json',
+					  async: false
+              }).done(function(data){
+                      resultadosBaseDatos = data[0];
+                      numeroResultadosBaseDatos = data[1];}
+					  ).error(function() {errorMysql=1;});
+			 			 					  	  
+			 if (numeroResultadosBaseDatos != null && errorMysql==0)
+	         {		 
+		        var res = resultadosBaseDatos[0].split("#");
+		        if (pts>bestScore)
+		          {
+		           var message="New record: "+userName+", level: "+msgLevel+", points: "+pts+", lineas: "+totLines; 				   
+				   $.ajax({ type: "POST",
+                       url: "php/conexionTwitter.php",
+					   async: false,
+                       data: { tweet: message}
+                   })
+				 
+		          }	  
+			 }									
+			 counterGame=1;		 
+		   }
+		   
+	    if (numeroResultadosBaseDatos == null || numeroResultadosBaseDatos == 0)
 	    {
                c.fillText("G A M E" , 300, 370); 
 		       c.fillText("O V E R" , 308, 420);
         }
-		$.ajax({
-           url: 'php/ExtraerdatosMysql.php',
-           dataType: 'json'
-        }).done(
-           function(data){
-             resultadosBaseDatos = data[0];
-             numeroResultadosBaseDatos = data[1];			 
-           }
-        );
-		if (numeroResultadosBaseDatos >0 &&numeroResultadosBaseDatos != null && resultadosBaseDatos != null)
+		else
 		{
 		  c.fillText("G A M E" , 300, 180);
 		  c.fillText("O V E R" , 308, 220);
@@ -481,11 +544,16 @@ function draw() {
 			posision_canvas=posision_canvas+30;
 			posicionScore=posicionScore+1;
           }
-		}		
+		  if (pts>bestScore)
+		   {
+		     c.font = "45px Comic Sans MS";
+		     c.fillStyle = "rgb(250, 250, 250)";
+	         c.fillText("New record!!!" ,208, 690);
+		   } 
+		}	
 	}
 	else{
 		drawBoard(); 							        // Board Update
-
 		c.font = "24px Comic Sans MS";
 		c.fillStyle = "rgb(250, 250, 250)";             //score   	
 		c.fillText(" "+ pts, 370, 90);
