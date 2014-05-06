@@ -55,19 +55,26 @@ var musica2                    =2;
 var counterGame                =0;
 var bestScore                  =0;
 var errorMysql                 =0;
+var pause                      = true;
 
 
 //Initializer
 function init() {
     canvas.addEventListener("touchstart", doTouchStart, true);
-	
 	$.ajax({url: 'php/ExtraerdatosMysql.php', 
               dataType: 'json',
 			  async: false
            }).done(function(data){
               resultadosBaseDatos = data[0];
-			  var res = resultadosBaseDatos[0].split("#");
-			  bestScore=res[1];
+			  if (data[0]=="")
+			  {
+			   bestScore=0;
+			  }
+			  else{
+			    var res = resultadosBaseDatos[0].split("#");
+			    bestScore=res[1];
+			  }
+
               }).error(function() {errorMysql=1;});
 	console.log("best score"+bestScore+"\n");		  
 	
@@ -99,6 +106,8 @@ function init() {
 	   sound.src = "media/tetris1.mp3";
 	   sound.play();
 	}});
+	inputText.hidden=true;
+	inputTextLabel.hidden=true;
     boardInitializer();
     loadExternalJS();
     Reset();
@@ -147,53 +156,61 @@ function keydownControl(e) {
             case 32:
 			  if (gameOver== true)
 			  {
-			    if (sound.paused==false)
-		        {
-			      audio=true;
-		          sound.pause();
-		        }
-			    else
-			    {
-			      audio=false;
-			    }
-	            sound.hidden= true;
-				inputText.hidden=true;
-				inputTextLabel.hidden=true;
-                PAUSE();
+			    if (pause)
+				{
+			      if (sound.paused==false)
+		          {
+			        audio=true;
+		            sound.pause();
+		          }
+			      else
+			      {
+			        audio=false;
+			      }
+	              sound.hidden= true;
+				  inputText.hidden=false;
+		          inputTextLabel.hidden=false;
+                  PAUSE();
+				}
+				else
+				{
+				  sound.hidden= false;
+		          inputText.hidden=true;
+		          inputTextLabel.hidden=true;
+		          if (audio==true)
+		          {
+		            sound.play();
+		          }
+                  PAUSE();
+				}
 			  } 
                break;
 	    case 13:
-		        window.location.reload();                
+		        if (pause)
+				{
+		           window.location.reload(); 
+                }				   
                break;
             case 77:
 			  if (gameOver== true)
 			  {
-			   if (sound.paused==true)
-		        {
-		          sound.play();
-		        }
-			    else
-			    {
-			      sound.pause();
-			    }
+			    if (pause)
+				{
+			      if (sound.paused==true)
+		           {
+		            sound.play();
+		           }
+			       else
+			       {
+			         sound.pause();
+			       }
+				 } 
 			  }	
                break;			
         }
 		
 	  }	
 	}	
-    else
-	{
-	    sound.hidden= false;
-		inputText.hidden=false;
-		inputTextLabel.hidden=false;
-	    //sound.duration > 0 && sound.paused para saber duracion y si esta en pausa
-		if (audio==true)
-		{
-		 sound.play();
-		}
-        PAUSE();
-	}
 }
 
 //Load Images			
@@ -463,7 +480,7 @@ function drawBoard() {
 //Main draw function
 function draw() {
     	
-	if(!playAnimation){	    
+	if(!pause){	    
 	    c.drawImage(instructions,29,0);
 	    c.font = "45px Comic Sans MS";		
 	}
@@ -546,9 +563,12 @@ function draw() {
           }
 		  if (pts>bestScore)
 		   {
-		     c.font = "45px Comic Sans MS";
+			 c.font = "25px Comic Sans MS";
 		     c.fillStyle = "rgb(250, 250, 250)";
-	         c.fillText("New record!!!" ,208, 690);
+	         c.fillText("New record!!! "+pts+"points" ,142, 675);
+			 c.font = "22px Comic Sans MS";
+		     c.fillStyle = "rgb(250, 250, 250)";
+			 c.fillText("Press the enter key for restart the game", 142, 700);
 		   } 
 		}	
 	}
@@ -560,6 +580,10 @@ function draw() {
 		c.fillText(" " + totLines, 210, 595);
 		c.font = "45px Comic Sans MS";
 		c.fillText(msgLevel, 172, 365);
+		c.font = "22px Comic Sans MS";
+		c.fillStyle = "rgb(250, 250, 250)";
+		c.fillText("Press the space key for instructions", 142, 675);
+		
 		
 	    if (!animation) {
 	            checkFigures(); 							// Figure

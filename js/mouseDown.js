@@ -27,7 +27,8 @@ function mouseDown() {
 //750,430 - 888,588 
 function PAUSE()
 {
-	playAnimation = !playAnimation;
+	//playAnimation = !playAnimation;
+	pause=!pause;
 	message = "PAUSE : "+message;
 	mainCicle();
 }
